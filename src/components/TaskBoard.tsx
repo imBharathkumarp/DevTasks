@@ -14,6 +14,16 @@ const TaskBoard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [newTaskStatus, setNewTaskStatus] = useState<Task['status']>('todo');
+  const [searchQuery, setSearchQuery] = useState(''); // <-- Add this
+
+  // Filter tasks by search query
+  const searchedTasks = searchQuery
+    ? filteredTasks.filter(
+        (task) =>
+          task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          task.description?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : filteredTasks;
 
   // Handle drag and drop
   const handleDragEnd = useCallback((result: DropResult) => {
@@ -70,10 +80,20 @@ const TaskBoard: React.FC = () => {
             Task Board
           </h1>
           <div className="text-sm text-gray-400">
-            {filteredTasks.length} tasks total
+            {searchedTasks.length} tasks total
           </div>
         </div>
-
+        {/* Search Box */}
+        <div className="flex items-center space-x-2 bg-gray-800 px-2 py-1 rounded-lg">
+          <Search className="w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-transparent outline-none text-white placeholder-gray-400 px-2"
+          />
+        </div>
         <motion.button
           onClick={() => handleAddTask()}
           className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -90,8 +110,10 @@ const TaskBoard: React.FC = () => {
         <div className="flex gap-6 overflow-x-auto pb-4">
           <AnimatePresence>
             {TASK_COLUMNS.map((columnConfig, index) => {
-              const columnTasks = tasksByColumn[columnConfig.id as Task['status']] || [];
-              
+              // Use searchedTasks instead of filteredTasks
+              const columnTasks = (tasksByColumn[columnConfig.id as Task['status']] || []).filter(
+                (task) => searchedTasks.some((t) => t.id === task.id)
+              );
               return (
                 <motion.div
                   key={columnConfig.id}
@@ -121,7 +143,7 @@ const TaskBoard: React.FC = () => {
       </DragDropContext>
 
       {/* Empty State */}
-      {filteredTasks.length === 0 && (
+      {searchedTasks.length === 0 && (
         <motion.div
           className="flex flex-col items-center justify-center h-96 text-gray-500"
           initial={{ opacity: 0 }}
