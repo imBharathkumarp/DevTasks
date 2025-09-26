@@ -41,6 +41,9 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, task, onClose, onSave }) 
   const [aiLoading, setAiLoading] = useState(false);
   const [aiSuggestions, setAiSuggestions] = useState<SubTask[]>([]);
   const [showAiSuggestions, setShowAiSuggestions] = useState(false);
+  const [assignees, setAssignees] = useState([...ASSIGNEES, 'Unassigned']);
+  const [showAddName, setShowAddName] = useState(false);
+  const [newAssignee, setNewAssignee] = useState('');
 
   // Initialize form when task changes
   useEffect(() => {
@@ -266,14 +269,55 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, task, onClose, onSave }) 
                   </label>
                   <select
                     value={formData.assignee}
-                    onChange={(e) => handleInputChange('assignee', e.target.value)}
+                    onChange={(e) => {
+                      if (e.target.value === '__add__') {
+                        setShowAddName(true);
+                      } else {
+                        handleInputChange('assignee', e.target.value);
+                      }
+                    }}
                     className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    <option value="">Unassigned</option>
-                    {ASSIGNEES.map(assignee => (
+                    {assignees.map(assignee => (
                       <option key={assignee} value={assignee}>{assignee}</option>
                     ))}
+                    <option value="__add__">➕ Add Name</option>
                   </select>
+                  {showAddName && (
+                    <div className="flex gap-2 mt-2">
+                      <input
+                        type="text"
+                        placeholder="Enter name"
+                        value={newAssignee}
+                        onChange={(e) => setNewAssignee(e.target.value)}
+                        className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                      <button
+                        type="button"
+                        className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        onClick={() => {
+                          if (newAssignee.trim()) {
+                            setAssignees([...assignees, newAssignee.trim()]);
+                            handleInputChange('assignee', newAssignee.trim());
+                            setNewAssignee('');
+                            setShowAddName(false);
+                          }
+                        }}
+                      >
+                        Add
+                      </button>
+                      <button
+                        type="button"
+                        className="px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                        onClick={() => {
+                          setShowAddName(false);
+                          setNewAssignee('');
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div>
