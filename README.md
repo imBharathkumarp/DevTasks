@@ -68,7 +68,7 @@ This project demonstrates:
 
 | Dashboard | Kanban Board | AI Suggestions |
 |-----------|--------------|----------------|
-| ![](https://via.placeholder.com/300x200?text=Dashboard) | ![](https://via.placeholder.com/300x200?text=Kanban+Board) | ![](https://via.placeholder.com/300x200?text=AI+Suggestions) |
+| ![alt text](image.png) | ![alt text](image-1.png) | ![alt text](image-2.png) |
 
 ---
 
