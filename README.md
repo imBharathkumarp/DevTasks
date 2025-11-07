@@ -7,7 +7,7 @@ _A smart, interactive task manager for developers to plan, track, and optimize t
 ## 📑 Table of Contents
 
 <details>
-  <summary><strong>Click to expand..</strong></summary>
+  <summary><strong>🔎Click to expand.👇</strong></summary>
 
   - [✨ Overview](#-overview)
   - [🧰 Core Features](#-core-features)
@@ -101,5 +101,10 @@ npm install
 ```bash
 npm run dev
 ```
+
+---
+
+## 👨‍💻 Author
+[Bharath Kumar P](https://github.com/imBharathkumarp) , Made with ❤ for portfolio project.
 
 ---
